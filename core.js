@@ -63,12 +63,13 @@ function range(d) {
               }
             }
           });
-
-          link.setAttribute("url", url);
-          link.innerText = null;
-          link.removeAttribute("href");
-          link.append(image);
-          link.style.display = "flex";
+          if (url.split(".")[3] == undefined) {
+            link.setAttribute("url", url);
+            link.innerText = null;
+            link.removeAttribute("href");
+            link.append(image);
+            link.style.display = "flex";
+          }
         }
       });
     });
