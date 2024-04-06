@@ -20,9 +20,12 @@ function range(d) {
       [...contents.querySelectorAll("a")].forEach((link) => {
         const url = link.href;
         if (
-          url.startsWith("https://playentry.org/uploads/") &&
-          !link.parentElement.querySelector(".waffle")
-        ) {
+          url.startsWith("http://playentry.org//uploads/") ||
+          (url.startsWith(
+            "https://playentry.org/redirect?external=https://ifh.cc/v-"
+          ) &&
+            !link.parentElement.querySelector(".waffle"))
+        ) { 
           const user = link.parentElement.parentElement
             .querySelector("li > div > a")
             .href.match(/[a-f\d]{24}/)[0];
@@ -30,7 +33,12 @@ function range(d) {
 
           const image = document.createElement("img");
           if (!blocked) {
-            image.src = url;
+            if (url.startsWith("http://playentry.org//u")) {
+              image.src = url;
+            } else {
+              image.src = `https://ifh.cc/g/${url.slice(40).split("/v-")[1]}`;
+              image.title = `ifh.cc로 올린 사진입니다`;
+            }
           } else {
             image.alt =
               "이 사용자는 차단되었습니다. 차단 해제하려면 클릭하세요.";
@@ -87,9 +95,9 @@ async function upload() {
 function click() {
   upload().then((d) => {
     navigator.clipboard.writeText(
-      `https://playentry.org/uploads/${d.id.slice(0, 2)}/${d.id.slice(2, 4)}/${
-        d.id
-      }.${d.ext}`
+      `playentry.org//uploads/${d.id.slice(0, 2)}/${d.id.slice(2, 4)}/${d.id}.${
+        d.ext
+      }`
     );
   });
 }
