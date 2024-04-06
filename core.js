@@ -25,7 +25,7 @@ function range(d) {
             "https://playentry.org/redirect?external=https://ifh.cc/v-"
           ) &&
             !link.parentElement.querySelector(".waffle"))
-        ) { 
+        ) {
           const user = link.parentElement.parentElement
             .querySelector("li > div > a")
             .href.match(/[a-f\d]{24}/)[0];
@@ -35,9 +35,17 @@ function range(d) {
           if (!blocked) {
             if (url.startsWith("http://playentry.org//u")) {
               image.src = url;
+              image.onerror = () => {
+                image.setAttribute("controls", true);
+                image.outerHTML = image.outerHTML.replace("img", "video");
+              };
             } else {
               image.src = `https://ifh.cc/g/${url.slice(40).split("/v-")[1]}`;
               image.title = `ifh.cc로 올린 사진입니다`;
+              image.onerror = () => {
+                image.setAttribute("controls", true);
+                image.outerHTML = image.outerHTML.replace("img", "video");
+              };
             }
           } else {
             image.alt =
