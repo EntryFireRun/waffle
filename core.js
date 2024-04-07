@@ -56,14 +56,14 @@ function range(d) {
               ) {
                 image.src = `https://ifh.cc/g/${url.slice(40).split("-")[1]}`;
               } else {
-                image.src = url;
+                image.src = url.slice(40);
               }
-              image.title = `ifh.cc로 올린 사진입니다`;
-              image.onerror = () => {
-                image.setAttribute("controls", true);
-                image.outerHTML = image.outerHTML.replace("img", "video");
-              };
-            } // 용량 차지하게 코드 두번 사용한거 불편하시다면 풀리퀘ㄱ
+            }
+            image.title = `ifh.cc로 올린 사진입니다`;
+            image.onerror = () => {
+              image.setAttribute("controls", true);
+              image.outerHTML = image.outerHTML.replace("img", "video");
+            };
           } else {
             image.src =
               "https://playentry.org//uploads/8e/48/8e48286flup0keag36t4743a431ofced.png";
