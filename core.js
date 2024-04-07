@@ -58,16 +58,15 @@ function range(d) {
               } else {
                 image.src = url.slice(40);
               }
-            }
-            image.title = `ifh.cc로 올린 사진입니다`;
-            image.onerror = () => {
-              image.setAttribute("controls", true);
-              image.outerHTML = image.outerHTML.replace("img", "video");
-            };
+              image.title = `ifh.cc로 올린 사진입니다`;
+              image.onerror = () => {
+                image.setAttribute("controls", true);
+                image.outerHTML = image.outerHTML.replace("img", "video");
+              };
+            } // image.oneerror은 같은 속성인데 불필요하게 두 번 쓴게 불편하시다면 풀리퀘ㄱ
           } else {
             image.src =
               "https://playentry.org//uploads/8e/48/8e48286flup0keag36t4743a431ofced.png";
-            //
             image.alt =
               "이 사용자는 차단되었습니다. 차단 해제하려면 차단해제를 눌러주세요.";
             link.removeAttribute("url");
