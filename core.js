@@ -83,18 +83,20 @@ function range(d) {
           link.append(image);
           link.style.display = "flex";
           blocker =
-            image.parentElement.parentElement.parentElement.children[1]
-              .firstChild;
-          blockerbutton = blocker.cloneNode(true);
-          blockerbutton.style.marginLeft = "10px";
-          blockerbutton.style.cursor = "pointer";
-          blockerbutton.style.backgroundColor = "#dd6666";
+            image.parentElement.parentElement.parentElement.lastChild.lastChild
+              .firstChild.firstChild;
+          blockerbutton = blocker.lastChild.cloneNode(true);
           if (blocked) {
-            blockerbutton.innerText = "차단해제";
+            blockerbutton.innerHTML = blockerbutton.innerHTML
+              .replace("신고하기", "차단해제")
+              .replace("댓글 가리기", "차단해제")
+              .replace("삭제하기", "차단해제"); // 왜 innerText 안됨;
           } else {
-            blockerbutton.innerText = "차단하기";
+            blockerbutton.innerHTML = blockerbutton.innerHTML
+              .replace("신고하기", "차단하기")
+              .replace("댓글 가리기", "차단하기")
+              .replace("삭제하기", "차단하기"); // 왜 innerText 안됨;
           }
-          blockerbutton.removeAttribute("href");
           blockerbutton.onclick = () => {
             if (blocked) {
               if (confirm("이 사용자를 차단 해제할까요?")) {
@@ -106,7 +108,7 @@ function range(d) {
               }
             }
           };
-          blocker.after(blockerbutton);
+          blocker.lastChild.after(blockerbutton);
           if (
             url.split(".")[3] != undefined &&
             url.startsWith(
