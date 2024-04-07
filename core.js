@@ -63,12 +63,25 @@ function range(d) {
               }
             }
           });
-          if (url.split(".")[3] == undefined) {
-            link.setAttribute("url", url);
-            link.innerText = null;
-            link.removeAttribute("href");
-            link.append(image);
-            link.style.display = "flex";
+          link.setAttribute("url", url);
+          link.innerText = null;
+          link.removeAttribute("href");
+          link.append(image);
+          link.style.display = "flex";
+          if (
+            url.split(".")[3] != undefined &&
+            url.startsWith(
+              "https://playentry.org/redirect?external=https://ifh.cc/v-"
+            )
+          ) {
+            for (let i = 2; i < image.src.split(".").length; i++) {
+              j = image.parentElement.cloneNode(true);
+              j.firstChild.src = `https://ifh.cc/g/${
+                j.firstChild.src.split(".")[i]
+              }`;
+              j.firstChild.className = `waffle`;
+              link.after(j);
+            }
           }
         }
       });
