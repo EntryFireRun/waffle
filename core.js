@@ -163,5 +163,28 @@ function click() {
   });
 }
 
-document.querySelector("div > h2")?.removeEventListener("click", click);
-document.querySelector("div > h2")?.addEventListener("click", click);
+function imageUploadButton() {
+  try {
+    wasans = document.querySelector("div > div > div > div > div > div > div");
+    wasansclone = wasans.cloneNode(true);
+    wasansclone.style.marginLeft = "10px";
+    wasansclone.onclick = () => {
+      click();
+    };
+    wasans.after(wasansclone);
+    wasansclone.firstChild.style.backgroundImage =
+      "url('https://playentry.org/img/IcoCmtPicture.svg')";
+    wasansclone.firstChild.style.backgroundRepeat = "no-repeat";
+  } catch {
+    setTimeout(() => {
+      imageUploadButton();
+    }, 100);
+  }
+}
+if (
+  new RegExp("https://playentry.org/community/entrystory/list.*$").test(
+    location.href
+  )
+) {
+  imageUploadButton();
+}
