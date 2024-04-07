@@ -21,8 +21,14 @@ function range(d) {
         const url = link.href;
         if (
           url.startsWith("http://playentry.org//uploads/") ||
-          (url.startsWith(
+          url.startsWith(
+            "https://playentry.org/redirect?external=https://ifh.cc/i-"
+          ) ||
+          url.startsWith(
             "https://playentry.org/redirect?external=https://ifh.cc/v-"
+          ) ||
+          (url.startsWith(
+            "https://playentry.org/redirect?external=https://ifh.cc/g/" // 정규식 안 사용해서 킹받으시다면 풀리퀘ㄱ
           ) &&
             !link.parentElement.querySelector(".waffle"))
         ) {
@@ -40,13 +46,24 @@ function range(d) {
                 image.outerHTML = image.outerHTML.replace("img", "video");
               };
             } else {
-              image.src = `https://ifh.cc/g/${url.slice(40).split("/v-")[1]}`;
+              if (
+                url.startsWith(
+                  "https://playentry.org/redirect?external=https://ifh.cc/v-"
+                ) ||
+                url.startsWith(
+                  "https://playentry.org/redirect?external=https://ifh.cc/i-"
+                )
+              ) {
+                image.src = `https://ifh.cc/g/${url.slice(40).split("-")[1]}`;
+              } else {
+                image.src = url;
+              }
               image.title = `ifh.cc로 올린 사진입니다`;
               image.onerror = () => {
                 image.setAttribute("controls", true);
                 image.outerHTML = image.outerHTML.replace("img", "video");
               };
-            }
+            } // 용량 차지하게 코드 두번 사용한거 불편하시다면 풀리퀘ㄱ
           } else {
             image.src =
               "https://playentry.org//uploads/8e/48/8e48286flup0keag36t4743a431ofced.png";
@@ -69,8 +86,9 @@ function range(d) {
             image.parentElement.parentElement.parentElement.children[1]
               .firstChild;
           blockerbutton = blocker.cloneNode(true);
-          blockerbutton.style.paddingLeft = "10px";
+          blockerbutton.style.marginLeft = "10px";
           blockerbutton.style.cursor = "pointer";
+          blockerbutton.style.backgroundColor = "#dd6666";
           if (blocked) {
             blockerbutton.innerText = "차단해제";
           } else {
