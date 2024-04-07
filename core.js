@@ -48,11 +48,36 @@ function range(d) {
               };
             }
           } else {
+            image.src =
+              "https://playentry.org//uploads/8e/48/8e48286flup0keag36t4743a431ofced.png";
+            //
             image.alt =
-              "이 사용자는 차단되었습니다. 차단 해제하려면 클릭하세요.";
+              "이 사용자는 차단되었습니다. 차단 해제하려면 차단해제를 눌러주세요.";
+            link.removeAttribute("url");
           }
           image.className = "waffle";
+          image.style.cursor = "pointer";
           image.addEventListener("click", () => {
+            window.open(image.src);
+          });
+          link.setAttribute("url", url);
+          link.innerText = null;
+          link.removeAttribute("href");
+          link.append(image);
+          link.style.display = "flex";
+          blocker =
+            image.parentElement.parentElement.parentElement.children[1]
+              .firstChild;
+          blockerbutton = blocker.cloneNode(true);
+          blockerbutton.style.paddingLeft = "10px";
+          blockerbutton.style.cursor = "pointer";
+          if (blocked) {
+            blockerbutton.innerText = "차단해제";
+          } else {
+            blockerbutton.innerText = "차단하기";
+          }
+          blockerbutton.removeAttribute("href");
+          blockerbutton.onclick = () => {
             if (blocked) {
               if (confirm("이 사용자를 차단 해제할까요?")) {
                 unblock(user);
@@ -62,12 +87,8 @@ function range(d) {
                 blocking(user);
               }
             }
-          });
-          link.setAttribute("url", url);
-          link.innerText = null;
-          link.removeAttribute("href");
-          link.append(image);
-          link.style.display = "flex";
+          };
+          blocker.after(blockerbutton);
           if (
             url.split(".")[3] != undefined &&
             url.startsWith(
