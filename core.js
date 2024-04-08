@@ -166,9 +166,15 @@ function click() {
 
 function imageUploadButton() {
   try {
+    const imagehover = document.createElement("style");
+    imagehover.textContent = `.imagebuttonstyle:hover {
+      background-image: url("https://playentry.org/uploads/확프/사진/확프사진온.svg") !important;
+    }`;
+    document.head.appendChild(imagehover);
     wasans = document.querySelector("div > div > div > div > div > div > div");
     wasansclone = wasans.cloneNode(true);
     wasansclone.style.marginLeft = "10px";
+    wasansclone.firstChild.classList.add("imagebuttonstyle");
     wasansclone.onclick = () => {
       click();
     };
