@@ -85,6 +85,7 @@ function range(d) {
             image.parentElement.parentElement.parentElement.lastChild.lastChild
               .firstChild.firstChild;
           blockerbutton = blocker.lastChild.cloneNode(true);
+          blockerbutton.lastChild.removeAttribute("href");
           if (blocked) {
             blockerbutton.innerHTML = blockerbutton.innerHTML
               .replace("신고하기", "차단해제")
@@ -98,11 +99,19 @@ function range(d) {
           }
           blockerbutton.onclick = () => {
             if (blocked) {
-              if (confirm("이 사용자를 차단 해제할까요?")) {
+              if (
+                confirm(
+                  "이 사용자를 차단 해제할까요?\n(차단 해제시 자동으로 새로고침됩니다)"
+                )
+              ) {
                 unblock(user);
               }
             } else {
-              if (confirm("이 사용자를 차단할까요?")) {
+              if (
+                confirm(
+                  "이 사용자를 차단할까요?\n(차단 시 자동으로 새로고침됩니다)"
+                )
+              ) {
                 blocking(user);
               }
             }
@@ -116,9 +125,11 @@ function range(d) {
           ) {
             for (let i = 2; i < image.src.split(".").length; i++) {
               j = image.parentElement.cloneNode(true);
-              j.firstChild.src = `https://ifh.cc/g/${
-                j.firstChild.src.split(".")[i]
-              }`;
+              if (!blocked) {
+                j.firstChild.src = `https://ifh.cc/g/${
+                  j.firstChild.src.split(".")[i]
+                }`;
+              }
               j.firstChild.className = `waffle`;
               link.after(j);
             }
