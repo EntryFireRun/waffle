@@ -98,23 +98,90 @@ function range(d) {
               .replace("삭제하기", "차단하기"); // 왜 innerText 안됨;
           }
           blockerbutton.onclick = () => {
-            if (blocked) {
-              if (
-                confirm(
-                  "이 사용자를 차단 해제할까요?\n(차단 해제시 자동으로 새로고침됩니다)"
-                )
-              ) {
+            backgroundblack = document.createElement("div");
+            wtfblackbro = document.createElement("h1");
+            yesqu = document.createElement("input");
+            noqu = document.createElement("input");
+            itscenterbutton = document.createElement("div");
+            backgroundfill = document.createElement("div");
+            reloadcon = document.createElement("p");
+
+            backgroundblack.style.backgroundColor = "#00000088";
+            backgroundblack.style.width = "100vw";
+            backgroundblack.style.height = "100vh";
+            backgroundblack.style.zIndex = "100";
+            backgroundblack.style.position = "fixed";
+
+            wtfblackbro.innerText = "정말로 차단하실건가요?";
+            wtfblackbro.style.textAlign = "center";
+            wtfblackbro.style.marginTop = "30px";
+
+            yesqu = document.createElement("input");
+            yesqu.style.marginRight = "20px";
+            yesqu.style.width = "200px";
+            yesqu.style.marginTop = "50px";
+            yesqu.style.height = "50px";
+            yesqu.style.borderRadius = "25px";
+            yesqu.style.borderStyle = "none";
+            yesqu.style.backgroundColor = "green";
+            yesqu.style.fontSize = "20px";
+            yesqu.style.color = "white";
+            yesqu.style.cursor = "pointer";
+            yesqu.type = "button";
+            yesqu.value = "네~ 네~";
+            yesqu.onclick = () => {
+              if (blocked) {
                 unblock(user);
-              }
-            } else {
-              if (
-                confirm(
-                  "이 사용자를 차단할까요?\n(차단 시 자동으로 새로고침됩니다)"
-                )
-              ) {
+              } else {
                 blocking(user);
               }
-            }
+            };
+
+            noqu = document.createElement("input");
+            noqu.style.marginRight = "20px";
+            noqu.style.width = "200px";
+            noqu.style.marginTop = "50px";
+            noqu.style.height = "50px";
+            noqu.style.borderRadius = "25px";
+            noqu.style.borderStyle = "none";
+            noqu.style.backgroundColor = "red";
+            noqu.style.fontSize = "20px";
+            noqu.style.color = "white";
+            noqu.style.cursor = "pointer";
+            noqu.type = "button";
+            noqu.value = "응 아니야~";
+            noqu.onclick = () => {
+              backgroundfill.remove();
+              backgroundblack.remove();
+            };
+
+            itscenterbutton.style.display = "flex";
+            itscenterbutton.style.justifyContent = "center";
+            itscenterbutton.style.alignItems = "center";
+
+            backgroundfill.style.backgroundColor = "white";
+            backgroundfill.style.width = "50vw";
+            backgroundfill.style.height = "25vh";
+            backgroundfill.style.zIndex = "101";
+            backgroundfill.style.position = "fixed";
+            backgroundfill.style.left = "25%";
+            backgroundfill.style.top = "37.5%";
+            backgroundfill.style.borderRadius = "50px";
+
+            reloadcon.style.marginLeft = "auto";
+            reloadcon.style.marginRight = "auto";
+            reloadcon.style.width = "100%";
+            reloadcon.style.textAlign = "center";
+            reloadcon.style.marginTop = "15px";
+            reloadcon.innerText = "네~네~를 선택하시면 자동으로 새로고침됩니다";
+
+            document.querySelector("#__next").prepend(backgroundblack);
+            document.querySelector("#__next").prepend(backgroundfill);
+            backgroundfill.appendChild(wtfblackbro);
+            backgroundfill.appendChild(itscenterbutton);
+            itscenterbutton.appendChild(yesqu);
+            itscenterbutton.appendChild(noqu);
+            itscenterbutton.after(reloadcon);
           };
           blocker.lastChild.after(blockerbutton);
           if (
@@ -206,3 +273,49 @@ if (
 ) {
   imageUploadButton();
 }
+/* <div style="
+    background-color: white;
+    width: 50vw;
+    height: 25vh;
+    z-index: 101;
+    position: fixed;
+    left: 25%;
+    top: 37.5%;
+    border-radius: 50px;
+"><h1 style="
+    text-align: center;
+    margin-top: 30px;
+">정말로 차단하실건가요?</h1><div style="
+    display: flex;
+    justify-content: center;
+    align-items: center;
+"><input type="button" value="네" style="
+    margin-right: 20px;
+    width: 200px;
+    margin-top: 50px;
+    height: 50px;
+    border-radius: 25px;
+    border-style: none;
+    background-color: green;
+    font-size: 20px;
+    color: white;
+    cursor: pointer;
+"><input type="button" value="응 아니야~" style="
+    margin-left: 20px;
+    width: 200px;
+    margin-top: 50px;
+    height: 50px;
+    border-radius: 25px;
+    border-style: none;
+    background-color: red;
+    font-size: 20px;
+    color: white;
+    cursor: pointer;
+"></div></div>
+<div style="
+    background-color: #00000088;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+    position: fixed;
+"></div> */
