@@ -112,7 +112,11 @@ function range(d) {
             backgroundblack.style.zIndex = "100";
             backgroundblack.style.position = "fixed";
 
-            wtfblackbro.innerText = "정말로 차단하실건가요?";
+            if (blocked) {
+              wtfblackbro.innerText = "정말로 차단 해제하실 건가요?";
+            } else {
+              wtfblackbro.innerText = "정말로 차단하실 건가요?";
+            }
             wtfblackbro.style.textAlign = "center";
             wtfblackbro.style.marginTop = "30px";
 
