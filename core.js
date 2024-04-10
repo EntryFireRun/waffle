@@ -98,7 +98,7 @@ function range(d) {
               .replace("삭제하기", "차단하기"); // 왜 innerText 안됨;
           }
           blockerbutton.onclick = () => {
-            if (window.innerWidth >= 768) {
+            if (window.innerWidth >= 768 && window.innerHeight >= 798) {
               backgroundblack = document.createElement("div");
               wtfblackbro = document.createElement("h1");
               yesqu = document.createElement("input");
