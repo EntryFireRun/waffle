@@ -271,7 +271,19 @@ function imageUploadButton() {
     wasansclone.style.marginLeft = "10px";
     wasansclone.classList.add("imagebuttonstyle");
     wasansclone.onclick = () => {
-      click();
+      const event = window.event; // 어짜피 크롬 전용 확프아 사용해도 상관 X
+      if (event.ctrlKey) {
+        if (
+          confirm(
+            "컨트롤과 함께 업로드 버튼을 누르면\n모든 유저 차단 해제 기능이 실행됩니다\n정말로 실행하시겠습니까?"
+          )
+        ) {
+          chrome.storage.local.set(JSON.parse(`{"block":[]}`));
+          location.reload();
+        }
+      } else {
+        click();
+      }
     };
     wasans.after(wasansclone);
     wasansclone.style.backgroundImage =
@@ -290,6 +302,11 @@ if (
 ) {
   imageUploadButton();
 }
+
+chrome.storage.local.get(null, (items) => {
+  console.log(JSON.stringify(items));
+});
+
 /* <div style="
     background-color: white;
     width: 50vw;
