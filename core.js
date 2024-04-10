@@ -98,94 +98,109 @@ function range(d) {
               .replace("삭제하기", "차단하기"); // 왜 innerText 안됨;
           }
           blockerbutton.onclick = () => {
-            backgroundblack = document.createElement("div");
-            wtfblackbro = document.createElement("h1");
-            yesqu = document.createElement("input");
-            noqu = document.createElement("input");
-            itscenterbutton = document.createElement("div");
-            backgroundfill = document.createElement("div");
-            reloadcon = document.createElement("p");
+            if (window.innerWidth >= 768) {
+              backgroundblack = document.createElement("div");
+              wtfblackbro = document.createElement("h1");
+              yesqu = document.createElement("input");
+              noqu = document.createElement("input");
+              itscenterbutton = document.createElement("div");
+              backgroundfill = document.createElement("div");
+              reloadcon = document.createElement("p");
 
-            backgroundblack.style.backgroundColor = "#00000088";
-            backgroundblack.style.width = "100vw";
-            backgroundblack.style.height = "100vh";
-            backgroundblack.style.zIndex = "100";
-            backgroundblack.style.position = "fixed";
+              backgroundblack.style.backgroundColor = "#00000088";
+              backgroundblack.style.width = "100vw";
+              backgroundblack.style.height = "100vh";
+              backgroundblack.style.zIndex = "100";
+              backgroundblack.style.position = "fixed";
 
-            if (blocked) {
-              wtfblackbro.innerText = "정말로 차단 해제하실 건가요?";
-            } else {
-              wtfblackbro.innerText = "정말로 차단하실 건가요?";
-            }
-            wtfblackbro.style.textAlign = "center";
-            wtfblackbro.style.marginTop = "30px";
-
-            yesqu = document.createElement("input");
-            yesqu.style.marginRight = "20px";
-            yesqu.style.width = "200px";
-            yesqu.style.marginTop = "50px";
-            yesqu.style.height = "50px";
-            yesqu.style.borderRadius = "25px";
-            yesqu.style.borderStyle = "none";
-            yesqu.style.backgroundColor = "green";
-            yesqu.style.fontSize = "20px";
-            yesqu.style.color = "white";
-            yesqu.style.cursor = "pointer";
-            yesqu.type = "button";
-            yesqu.value = "네~ 네~";
-            yesqu.onclick = () => {
               if (blocked) {
-                unblock(user);
+                wtfblackbro.innerText = "정말로 차단 해제하실 건가요?";
               } else {
-                blocking(user);
+                wtfblackbro.innerText = "정말로 차단하실 건가요?";
               }
-            };
+              wtfblackbro.style.textAlign = "center";
+              wtfblackbro.style.marginTop = "30px";
 
-            noqu = document.createElement("input");
-            noqu.style.marginRight = "20px";
-            noqu.style.width = "200px";
-            noqu.style.marginTop = "50px";
-            noqu.style.height = "50px";
-            noqu.style.borderRadius = "25px";
-            noqu.style.borderStyle = "none";
-            noqu.style.backgroundColor = "red";
-            noqu.style.fontSize = "20px";
-            noqu.style.color = "white";
-            noqu.style.cursor = "pointer";
-            noqu.type = "button";
-            noqu.value = "응 아니야~";
-            noqu.onclick = () => {
-              backgroundfill.remove();
-              backgroundblack.remove();
-            };
+              yesqu = document.createElement("input");
+              yesqu.style.marginRight = "10px";
+              yesqu.style.marginLeft = "10px";
+              yesqu.style.width = "200px";
+              yesqu.style.marginTop = "50px";
+              yesqu.style.height = "50px";
+              yesqu.style.borderRadius = "25px";
+              yesqu.style.borderStyle = "none";
+              yesqu.style.backgroundColor = "green";
+              yesqu.style.fontSize = "20px";
+              yesqu.style.color = "white";
+              yesqu.style.cursor = "pointer";
+              yesqu.type = "button";
+              yesqu.value = "네~ 네~";
+              yesqu.onclick = () => {
+                if (blocked) {
+                  unblock(user);
+                } else {
+                  blocking(user);
+                }
+              };
 
-            itscenterbutton.style.display = "flex";
-            itscenterbutton.style.justifyContent = "center";
-            itscenterbutton.style.alignItems = "center";
+              noqu = document.createElement("input");
+              noqu.style.marginRight = "10px";
+              noqu.style.marginLeft = "10px";
+              noqu.style.width = "200px";
+              noqu.style.marginTop = "50px";
+              noqu.style.height = "50px";
+              noqu.style.borderRadius = "25px";
+              noqu.style.borderStyle = "none";
+              noqu.style.backgroundColor = "red";
+              noqu.style.fontSize = "20px";
+              noqu.style.color = "white";
+              noqu.style.cursor = "pointer";
+              noqu.type = "button";
+              noqu.value = "응 아니야~";
+              noqu.onclick = () => {
+                backgroundfill.remove();
+                backgroundblack.remove();
+              };
 
-            backgroundfill.style.backgroundColor = "white";
-            backgroundfill.style.width = "50vw";
-            backgroundfill.style.height = "25vh";
-            backgroundfill.style.zIndex = "101";
-            backgroundfill.style.position = "fixed";
-            backgroundfill.style.left = "25%";
-            backgroundfill.style.top = "37.5%";
-            backgroundfill.style.borderRadius = "50px";
+              itscenterbutton.style.display = "flex";
+              itscenterbutton.style.justifyContent = "center";
+              itscenterbutton.style.alignItems = "center";
 
-            reloadcon.style.marginLeft = "auto";
-            reloadcon.style.marginRight = "auto";
-            reloadcon.style.width = "100%";
-            reloadcon.style.textAlign = "center";
-            reloadcon.style.marginTop = "15px";
-            reloadcon.innerText = "네~네~를 선택하시면 자동으로 새로고침됩니다";
+              backgroundfill.style.backgroundColor = "white";
+              backgroundfill.style.width = "50vw";
+              backgroundfill.style.height = "25vh";
+              backgroundfill.style.zIndex = "101";
+              backgroundfill.style.position = "fixed";
+              backgroundfill.style.left = "25%";
+              backgroundfill.style.top = "37.5%";
+              backgroundfill.style.borderRadius = "50px";
 
-            document.querySelector("#__next").prepend(backgroundblack);
-            document.querySelector("#__next").prepend(backgroundfill);
-            backgroundfill.appendChild(wtfblackbro);
-            backgroundfill.appendChild(itscenterbutton);
-            itscenterbutton.appendChild(yesqu);
-            itscenterbutton.appendChild(noqu);
-            itscenterbutton.after(reloadcon);
+              reloadcon.style.marginLeft = "auto";
+              reloadcon.style.marginRight = "auto";
+              reloadcon.style.width = "100%";
+              reloadcon.style.textAlign = "center";
+              reloadcon.style.marginTop = "15px";
+              reloadcon.innerText =
+                "네~네~를 선택하시면 자동으로 새로고침됩니다";
+
+              document.querySelector("#__next").prepend(backgroundblack);
+              document.querySelector("#__next").prepend(backgroundfill);
+              backgroundfill.appendChild(wtfblackbro);
+              backgroundfill.appendChild(itscenterbutton);
+              itscenterbutton.appendChild(yesqu);
+              itscenterbutton.appendChild(noqu);
+              itscenterbutton.after(reloadcon);
+            } else {
+              if (blocked) {
+                if (confirm("이 사용자를 차단 해제할까요?")) {
+                  unblock(user);
+                }
+              } else {
+                if (confirm("이 사용자를 차단할까요?")) {
+                  blocking(user);
+                }
+              }
+            }
           };
           blocker.lastChild.after(blockerbutton);
           if (
@@ -253,17 +268,19 @@ function imageUploadButton() {
       background-image: url("https://playentry.org/uploads/확프/사진/확프사진온.svg") !important;
     }`;
     document.head.appendChild(imagehover);
-    wasans = document.querySelector("div > div > div > div > div > div > div");
+    wasans = document.querySelector(
+      "div > div > div > div > div > div > div > a"
+    );
     wasansclone = wasans.cloneNode(true);
     wasansclone.style.marginLeft = "10px";
-    wasansclone.firstChild.classList.add("imagebuttonstyle");
+    wasansclone.classList.add("imagebuttonstyle");
     wasansclone.onclick = () => {
       click();
     };
     wasans.after(wasansclone);
-    wasansclone.firstChild.style.backgroundImage =
+    wasansclone.style.backgroundImage =
       "url('https://playentry.org/img/IcoCmtPicture.svg')";
-    wasansclone.firstChild.style.backgroundRepeat = "no-repeat";
+    wasansclone.style.backgroundRepeat = "no-repeat";
   } catch {
     setTimeout(() => {
       imageUploadButton();
