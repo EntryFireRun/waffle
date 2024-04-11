@@ -80,6 +80,10 @@ function range(d) {
           link.innerText = null;
           link.removeAttribute("href");
           link.append(image);
+          if (url.startsWith("http://playentry.org//u") == false) {
+            image.parentNode.parentNode.parentNode.parentNode.style.borderInline =
+              "2px skyblue solid";
+          }
           link.style.display = "flex";
           blocker =
             image.parentElement.parentElement.parentElement.lastChild.lastChild
