@@ -215,6 +215,15 @@ function range(d) {
                 j.firstChild.src = `https://ifh.cc/g/${
                   j.firstChild.src.split(".")[i]
                 }`;
+                j.firstChild.onclick = () => {
+                  if (window.event.ctrlKey) {
+                    window.open(j.firstChild.src);
+                  } else if (window.event.shiftKey) {
+                    window.open(j.firstChild.src, (target = "_blank"));
+                  } else {
+                    location.href = j.firstChild.src;
+                  }
+                };
               }
               j.firstChild.className = `waffle`;
               link.after(j);
