@@ -43,7 +43,7 @@ function range(d) {
               image.src = url;
               image.onerror = () => {
                 image.setAttribute("controls", true);
-                image.outerHTML = image.outerHTML.replace("img", "video");
+                image.outerHTML = image.outerHTML.replace("<img", "<video");
               };
             } else {
               if (
@@ -61,7 +61,7 @@ function range(d) {
               image.title = `ifh.cc로 올린 사진입니다`;
               image.onerror = () => {
                 image.setAttribute("controls", true);
-                image.outerHTML = image.outerHTML.replace("img", "video");
+                image.outerHTML = image.outerHTML.replace("img>", "video>");
               };
             } // image.oneerror은 같은 속성인데 불필요하게 두 번 쓴게 불편하시다면 풀리퀘ㄱ
           } else {
@@ -211,18 +211,27 @@ function range(d) {
           ) {
             for (let i = 2; i < image.src.split(".").length; i++) {
               j = image.parentElement.cloneNode(true);
+              j.firstChild.onerror = () => {
+                if (j.firstChild.outerHTML.startsWith("<img")) {
+                  j.firstChild.setAttribute("controls", true);
+                  j.outerHTML = j.firstChild.outerHTML.replace(
+                    "<img",
+                    "<video"
+                  );
+                } else {
+                  j.removeAttribute("controls", true);
+                  j.firstChild.outerHTML = j.firstChild.outerHTML.replace(
+                    "<video",
+                    "<img"
+                  );
+                }
+              };
               if (!blocked) {
                 j.firstChild.src = `https://ifh.cc/g/${
                   j.firstChild.src.split(".")[i]
                 }`;
                 j.firstChild.onclick = () => {
-                  if (window.event.ctrlKey) {
-                    window.open(j.firstChild.src);
-                  } else if (window.event.shiftKey) {
-                    window.open(j.firstChild.src, (target = "_blank"));
-                  } else {
-                    location.href = j.firstChild.src;
-                  }
+                  window.open(j.firstChild.src);
                 };
               }
               j.firstChild.className = `waffle`;
@@ -308,8 +317,9 @@ function imageUploadButton() {
     }, 100);
   }
 }
+
 if (
-  new RegExp("https://playentry.org/community/entrystory/list.*$").test(
+  /https:\/\/playentry\.org\/community\/entrystory\/list\?\w{4}=.*$/g.test(
     location.href
   )
 ) {
