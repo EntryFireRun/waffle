@@ -91,18 +91,21 @@ function range(d) {
           blocker =
             image.parentElement.parentElement.parentElement.lastChild.lastChild
               .firstChild.firstChild;
-          blockerbutton = blocker.lastChild.cloneNode(true);
-          blockerbutton.lastChild.removeAttribute("href");
-          if (blocked) {
-            blockerbutton.innerHTML = blockerbutton.innerHTML
-              .replace("신고하기", "차단해제")
-              .replace("댓글 가리기", "차단해제")
-              .replace("삭제하기", "차단해제"); // 왜 innerText 안됨;
-          } else {
-            blockerbutton.innerHTML = blockerbutton.innerHTML
-              .replace("신고하기", "차단하기")
-              .replace("댓글 가리기", "차단하기")
-              .replace("삭제하기", "차단하기"); // 왜 innerText 안됨;
+          if (blocker.innerHTML.indexOf("차단") == -1) {
+            blockerbutton = blocker.lastChild.cloneNode(true);
+            blockerbutton.lastChild.removeAttribute("href");
+            if (blocked) {
+              blockerbutton.innerHTML = blockerbutton.innerHTML
+                .replace("신고하기", "차단해제")
+                .replace("댓글 가리기", "차단해제")
+                .replace("삭제하기", "차단해제"); // 왜 innerText 안됨;
+            }
+            if (!blocked) {
+              blockerbutton.innerHTML = blockerbutton.innerHTML
+                .replace("신고하기", "차단하기")
+                .replace("댓글 가리기", "차단하기")
+                .replace("삭제하기", "차단하기"); // 왜 innerText 안됨;
+            }
           }
           blockerbutton.onclick = () => {
             backgroundblack = document.createElement("div");
