@@ -27,6 +27,9 @@ function range(d) {
           url.startsWith(
             "https://playentry.org/redirect?external=https://ifh.cc/v-"
           ) ||
+          url.startsWith(
+            "https://playentry.org/redirect?external=https://ifh.cc/v/"
+          ) ||
           (url.startsWith(
             "https://playentry.org/redirect?external=https://ifh.cc/g/" // 정규식 안 사용해서 킹받으시다면 풀리퀘ㄱ
           ) &&
@@ -61,7 +64,7 @@ function range(d) {
               image.title = `ifh.cc로 올린 사진입니다`;
               image.onerror = () => {
                 image.setAttribute("controls", true);
-                image.outerHTML = image.outerHTML.replace("img>", "video>");
+                image.outerHTML = image.outerHTML.replace("<img", "<video");
               };
             } // image.oneerror은 같은 속성인데 불필요하게 두 번 쓴게 불편하시다면 풀리퀘ㄱ
           } else {
