@@ -293,13 +293,13 @@ function imageUploadButton() {
     }`;
     document.head.appendChild(imagehover);
     wasans = document.querySelector(
-      "div > div > div > div > div > div > div > a"
+      "section > div > div > div > div > div > div > div > a"
     );
     wasansclone = wasans.cloneNode(true);
     wasansclone.style.marginLeft = "10px";
     wasansclone.classList.add("imagebuttonstyle");
     wasansclone.onclick = () => {
-      const event = window.event; // 어짜피 크롬 전용 확프아 사용해도 상관 X
+      const event = window.event; // 어짜피 크롬 전용 확프라 사용해도 상관 X
       if (event.ctrlKey) {
         if (
           confirm(
