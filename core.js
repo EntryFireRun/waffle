@@ -47,6 +47,10 @@ function range(d) {
               image.onerror = () => {
                 image.setAttribute("controls", true);
                 image.outerHTML = image.outerHTML.replace("<img", "<video");
+                image.outerHTML = image.outerHTML.replace(
+                  "http://",
+                  "https://"
+                );
               };
             } else {
               if (
