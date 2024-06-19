@@ -48,15 +48,23 @@ function displayPostImage(postList) {
         // 이미지 url인지 확인
         if (
           url.startsWith("http://playentry.org//uploads/") ||
-          url.startsWith("https://playentry.org/redirect?external=https://ifh.cc/i-") ||
-          url.startsWith("https://playentry.org/redirect?external=https://ifh.cc/v-") ||
-          url.startsWith("https://playentry.org/redirect?external=https://ifh.cc/v/") ||
-          (url.startsWith("https://playentry.org/redirect?external=https://ifh.cc/g/") && // 정규식 안 사용해서 킹받으시다면 풀리퀘ㄱ
-          !link.parentElement.querySelector(".waffle"))
+          url.startsWith(
+            "https://playentry.org/redirect?external=https://ifh.cc/i-"
+          ) ||
+          url.startsWith(
+            "https://playentry.org/redirect?external=https://ifh.cc/v-"
+          ) ||
+          url.startsWith(
+            "https://playentry.org/redirect?external=https://ifh.cc/v/"
+          ) ||
+          (url.startsWith(
+            "https://playentry.org/redirect?external=https://ifh.cc/g/"
+          ) && // 정규식 안 사용해서 킹받으시다면 풀리퀘ㄱ
+            !link.parentElement.querySelector(".waffle"))
         ) {
           const userId = link.parentElement.parentElement
-                            .querySelector("li > div > a")
-                            .href.match(/[a-f\d]{24}/)[0];
+            .querySelector("li > div > a")
+            .href.match(/[a-f\d]{24}/)[0];
           let blocked = block.includes(userId);
 
           const image = document.createElement("img");
@@ -76,8 +84,12 @@ function displayPostImage(postList) {
             } else {
               // ifh.cc 인 경우
               if (
-                url.startsWith("https://playentry.org/redirect?external=https://ifh.cc/v-") ||
-                url.startsWith("https://playentry.org/redirect?external=https://ifh.cc/i-")
+                url.startsWith(
+                  "https://playentry.org/redirect?external=https://ifh.cc/v-"
+                ) ||
+                url.startsWith(
+                  "https://playentry.org/redirect?external=https://ifh.cc/i-"
+                )
               ) {
                 image.src = `https://ifh.cc/g/${url.slice(40).split("-")[1]}`;
               } else {
@@ -91,14 +103,17 @@ function displayPostImage(postList) {
             } // image.oneerror은 같은 속성인데 불필요하게 두 번 쓴게 불편하시다면 풀리퀘ㄱ
           } else {
             // 차단됐을 시 이미지 차단
-            image.src = "https://playentry.org//uploads/8e/48/8e48286flup0keag36t4743a431ofced.png";
-            image.alt = "이 사용자는 차단되었습니다. 차단 해제하려면 차단해제를 눌러주세요.";
+            image.src =
+              "https://playentry.org//uploads/8e/48/8e48286flup0keag36t4743a431ofced.png";
+            image.alt =
+              "이 사용자는 차단되었습니다. 차단 해제하려면 차단해제를 눌러주세요.";
             link.removeAttribute("url");
           }
 
           image.className = "waffle";
           image.style.cursor = "pointer";
-          image.addEventListener("click", () => { // 이미지 클릭 시 새 탭에서 이미지 열기
+          image.addEventListener("click", () => {
+            // 이미지 클릭 시 새 탭에서 이미지 열기
             window.open(image.src);
           });
           link.setAttribute("url", url);
@@ -110,9 +125,9 @@ function displayPostImage(postList) {
               "2px skyblue solid";
           }
           link.style.display = "flex";
-          blocker = image.parentElement.parentElement.parentElement
-                          .lastChild.lastChild
-                          .firstChild.firstChild;
+          blocker =
+            image.parentElement.parentElement.parentElement.lastChild.lastChild
+              .firstChild.firstChild;
           if (blocker.innerHTML.indexOf("차단") == -1) {
             blockerButton = blocker.lastChild.cloneNode(true);
             blockerButton.lastChild.removeAttribute("href");
@@ -319,13 +334,6 @@ function click() {
  */
 function addImageUploadButton() {
   try {
-    // 이미지 업로드 버튼에 마우스 가져다 댔을 때 효과 추가
-    const imageHover = document.createElement("style");
-    imageHover.textContent = `.imageButtonStyle:hover {
-      background-image: url("https://playentry.org/uploads/확프/사진/확프사진온.svg") !important;
-    }`;
-    document.head.appendChild(imageHover);
-
     // 스티커 버튼 복사해서 이미지 업로드 버튼으로 변환
     stickerButton = document.querySelector(
       "section > div > div > div > div > div > div > div > a"
@@ -336,10 +344,11 @@ function addImageUploadButton() {
     stickerButtonClone.onclick = () => {
       const event = window.event; // 어짜피 크롬 전용 확프라 사용해도 상관 X
 
-      if (event.ctrlKey) { // 버튼을 컨트롤과 함께 누르면 모든 유저 차단 해제
+      if (event.ctrlKey) {
+        // 버튼을 컨트롤과 함께 누르면 모든 유저 차단 해제
         let isUnblockAllUsers = confirm(
           "컨트롤과 함께 업로드 버튼을 누르면\n모든 유저 차단 해제 기능이 실행됩니다\n정말로 실행하시겠습니까?"
-        )
+        );
 
         if (isUnblockAllUsers) {
           chrome.storage.local.set(JSON.parse(`{"block":[]}`));
@@ -350,16 +359,29 @@ function addImageUploadButton() {
       }
     };
     stickerButton.after(stickerButtonClone);
-    stickerButtonClone.style.backgroundImage = "url('https://playentry.org/img/IcoCmtPicture.svg')";
+    stickerButtonClone.style.backgroundImage =
+      "url('https://playentry.org/img/IcoCmtPicture.svg')";
     stickerButtonClone.style.backgroundRepeat = "no-repeat";
+    // 이미지 업로드 버튼에 마우스 가져다 댔을 때 효과 추가
+    const imageHover = document.createElement("style");
+    imageHover.textContent = `.imageButtonStyle:hover {
+      background-image: url("https://playentry.org/uploads/확프/사진/확프사진온.svg") !important;
+    }`;
+    document.head.appendChild(imageHover);
   } catch {
-    setTimeout(() => {
-      addImageUploadButton();
-    }, 100);
+    if (
+      JSON.parse(document.getElementById("__NEXT_DATA__").innerText).props
+        .initialState.common.user != null
+    ) {
+      setTimeout(() => {
+        addImageUploadButton();
+      }, 100);
+    }
   }
 }
 
-const entrystoryUrlPattern = /https:\/\/playentry\.org\/community\/entrystory\/list\?\w{4}=.*$/g;
+const entrystoryUrlPattern =
+  /https:\/\/playentry\.org\/community\/entrystory\/list\?\w{4}=.*$/g;
 
 // 현재 페이지가 엔트리 이야기 일시 이미지 업로드 버튼 추가
 if (entrystoryUrlPattern.test(location.href)) {
@@ -370,8 +392,6 @@ if (entrystoryUrlPattern.test(location.href)) {
 /* chrome.storage.local.get(null, (items) => {
   console.log(JSON.stringify(items));
 }); */
-
-
 
 // 밑에 있는 건 무시하세요
 // ----------------------------------------------------------------
