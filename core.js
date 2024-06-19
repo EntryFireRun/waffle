@@ -1,48 +1,69 @@
+/*
+
+  waffle의 기능이 구현되어 있는 파일입니다.
+
+  functions
+    - addImageUploadButton: 이미지 업로드 버튼 추가하는 함수
+    - click: 이미지를 업로드 버튼 클릭 시 호출되는 함수
+    - upload: 이미지를 엔트리에 업로드 하는 함수
+    - displayPostImage: 엔트리 이야기에서 이미지 링크 안에 있는 이미지를 표시하는 함수
+
+  chrome storage
+    - block: 차단된 사용자의 id가 들어가 있습니다.
+
+*/
+
 /**
- * @param {HTMLElement[]} d
+ * 엔트리 이야기에서 이미지 링크 안에 있는 이미지를 표시하는 함수
+ * @param {HTMLElement[]} postList - 엔트리 이야기 글 요소 리스트
  */
-function range(d) {
+function displayPostImage(postList) {
   chrome.storage.local.get("block", function ({ block }) {
+    /**
+     * 특정 유저를 차단하는 함수
+     * @param {string} id - 차단할 유저 id
+     */
     function blocking(id) {
       block.push(id);
       chrome.storage.local.set({ block });
       location.reload();
     }
 
+    /**
+     * 특정 유저를 차단 해제하는 함수
+     * @param {string} id - 차단 해제할 유저 id
+     */
     function unblock(id) {
       block = block.filter((u) => u !== id);
       chrome.storage.local.set({ block });
       location.reload();
     }
 
-    d.forEach((dom) => {
+    // 모든 글 확인
+    postList.forEach((dom) => {
       const contents = dom.querySelectorAll("div > div")[1];
+      // 글에 있는 모든 url 확인
       [...contents.querySelectorAll("a")].forEach((link) => {
         const url = link.href;
+        // 이미지 url인지 확인
         if (
           url.startsWith("http://playentry.org//uploads/") ||
-          url.startsWith(
-            "https://playentry.org/redirect?external=https://ifh.cc/i-"
-          ) ||
-          url.startsWith(
-            "https://playentry.org/redirect?external=https://ifh.cc/v-"
-          ) ||
-          url.startsWith(
-            "https://playentry.org/redirect?external=https://ifh.cc/v/"
-          ) ||
-          (url.startsWith(
-            "https://playentry.org/redirect?external=https://ifh.cc/g/" // 정규식 안 사용해서 킹받으시다면 풀리퀘ㄱ
-          ) &&
-            !link.parentElement.querySelector(".waffle"))
+          url.startsWith("https://playentry.org/redirect?external=https://ifh.cc/i-") ||
+          url.startsWith("https://playentry.org/redirect?external=https://ifh.cc/v-") ||
+          url.startsWith("https://playentry.org/redirect?external=https://ifh.cc/v/") ||
+          (url.startsWith("https://playentry.org/redirect?external=https://ifh.cc/g/") && // 정규식 안 사용해서 킹받으시다면 풀리퀘ㄱ
+          !link.parentElement.querySelector(".waffle"))
         ) {
-          const user = link.parentElement.parentElement
-            .querySelector("li > div > a")
-            .href.match(/[a-f\d]{24}/)[0];
-          let blocked = block.includes(user);
+          const userId = link.parentElement.parentElement
+                            .querySelector("li > div > a")
+                            .href.match(/[a-f\d]{24}/)[0];
+          let blocked = block.includes(userId);
 
           const image = document.createElement("img");
           if (!blocked) {
+            // 차단되지 않았을 시 이미지 표시
             if (url.startsWith("http://playentry.org//u")) {
+              // playentry.org//uploads 인 경우
               image.src = url;
               image.onerror = () => {
                 image.setAttribute("controls", true);
@@ -53,13 +74,10 @@ function range(d) {
                 );
               };
             } else {
+              // ifh.cc 인 경우
               if (
-                url.startsWith(
-                  "https://playentry.org/redirect?external=https://ifh.cc/v-"
-                ) ||
-                url.startsWith(
-                  "https://playentry.org/redirect?external=https://ifh.cc/i-"
-                )
+                url.startsWith("https://playentry.org/redirect?external=https://ifh.cc/v-") ||
+                url.startsWith("https://playentry.org/redirect?external=https://ifh.cc/i-")
               ) {
                 image.src = `https://ifh.cc/g/${url.slice(40).split("-")[1]}`;
               } else {
@@ -72,15 +90,15 @@ function range(d) {
               };
             } // image.oneerror은 같은 속성인데 불필요하게 두 번 쓴게 불편하시다면 풀리퀘ㄱ
           } else {
-            image.src =
-              "https://playentry.org//uploads/8e/48/8e48286flup0keag36t4743a431ofced.png";
-            image.alt =
-              "이 사용자는 차단되었습니다. 차단 해제하려면 차단해제를 눌러주세요.";
+            // 차단됐을 시 이미지 차단
+            image.src = "https://playentry.org//uploads/8e/48/8e48286flup0keag36t4743a431ofced.png";
+            image.alt = "이 사용자는 차단되었습니다. 차단 해제하려면 차단해제를 눌러주세요.";
             link.removeAttribute("url");
           }
+
           image.className = "waffle";
           image.style.cursor = "pointer";
-          image.addEventListener("click", () => {
+          image.addEventListener("click", () => { // 이미지 클릭 시 새 탭에서 이미지 열기
             window.open(image.src);
           });
           link.setAttribute("url", url);
@@ -92,27 +110,28 @@ function range(d) {
               "2px skyblue solid";
           }
           link.style.display = "flex";
-          blocker =
-            image.parentElement.parentElement.parentElement.lastChild.lastChild
-              .firstChild.firstChild;
+          blocker = image.parentElement.parentElement.parentElement
+                          .lastChild.lastChild
+                          .firstChild.firstChild;
           if (blocker.innerHTML.indexOf("차단") == -1) {
-            blockerbutton = blocker.lastChild.cloneNode(true);
-            blockerbutton.lastChild.removeAttribute("href");
+            blockerButton = blocker.lastChild.cloneNode(true);
+            blockerButton.lastChild.removeAttribute("href");
             if (blocked) {
-              blockerbutton.innerHTML = blockerbutton.innerHTML
+              blockerButton.innerHTML = blockerButton.innerHTML
                 .replace("신고하기", "차단해제")
                 .replace("댓글 가리기", "차단해제")
                 .replace("삭제하기", "차단해제"); // 왜 innerText 안됨;
             }
             if (!blocked) {
-              blockerbutton.innerHTML = blockerbutton.innerHTML
+              blockerButton.innerHTML = blockerButton.innerHTML
                 .replace("신고하기", "차단하기")
                 .replace("댓글 가리기", "차단하기")
                 .replace("삭제하기", "차단하기"); // 왜 innerText 안됨;
             }
           }
-          blockerbutton.onclick = () => {
-            backgroundblack = document.createElement("div");
+          blockerButton.onclick = () => {
+            backgroundBlack = document.createElement("div");
+            // 정 리 안해 이름 이게 뭐야
             wtfblackbro = document.createElement("h1");
             yesqu = document.createElement("input");
             noqu = document.createElement("input");
@@ -120,11 +139,11 @@ function range(d) {
             backgroundfill = document.createElement("div");
             reloadcon = document.createElement("p");
 
-            backgroundblack.style.backgroundColor = "#00000088";
-            backgroundblack.style.width = "100vw";
-            backgroundblack.style.height = "100vh";
-            backgroundblack.style.zIndex = "100";
-            backgroundblack.style.position = "fixed";
+            backgroundBlack.style.backgroundColor = "#00000088";
+            backgroundBlack.style.width = "100vw";
+            backgroundBlack.style.height = "100vh";
+            backgroundBlack.style.zIndex = "100";
+            backgroundBlack.style.position = "fixed";
 
             if (blocked) {
               wtfblackbro.innerText = "정말로 차단 해제하실 건가요?";
@@ -150,9 +169,9 @@ function range(d) {
             yesqu.value = "네~ 네~";
             yesqu.onclick = () => {
               if (blocked) {
-                unblock(user);
+                unblock(userId);
               } else {
-                blocking(user);
+                blocking(userId);
               }
             };
 
@@ -172,7 +191,7 @@ function range(d) {
             noqu.value = "응 아니야~";
             noqu.onclick = () => {
               backgroundfill.remove();
-              backgroundblack.remove();
+              backgroundBlack.remove();
             };
 
             itscenterbutton.style.display = "flex";
@@ -195,7 +214,7 @@ function range(d) {
             reloadcon.style.marginTop = "15px";
             reloadcon.innerText = "네~네~를 선택하시면 자동으로 새로고침됩니다";
 
-            document.querySelector("#__next").prepend(backgroundblack);
+            document.querySelector("#__next").prepend(backgroundBlack);
             document.querySelector("#__next").prepend(backgroundfill);
             backgroundfill.appendChild(wtfblackbro);
             backgroundfill.appendChild(itscenterbutton);
@@ -211,7 +230,7 @@ function range(d) {
             }
           };
           if (blocker.lastChild.innerText != "차단하기") {
-            blocker.lastChild.after(blockerbutton);
+            blocker.lastChild.after(blockerButton);
           }
           if (
             url.split(".")[3] != undefined &&
@@ -254,6 +273,9 @@ function range(d) {
   });
 }
 
+/**
+ * 이미지를 엔트리에 업로드 하는 함수
+ */
 async function upload() {
   return new Promise((res, _) => {
     const input = document.createElement("input");
@@ -279,6 +301,9 @@ async function upload() {
   });
 }
 
+/**
+ * 이미지를 업로드 버튼 클릭 시 호출되는 함수
+ */
 function click() {
   upload().then((d) => {
     navigator.clipboard.writeText(
@@ -289,27 +314,34 @@ function click() {
   });
 }
 
-function imageUploadButton() {
+/**
+ * 이미지 업로드 버튼 추가하는 함수
+ */
+function addImageUploadButton() {
   try {
-    const imagehover = document.createElement("style");
-    imagehover.textContent = `.imagebuttonstyle:hover {
+    // 이미지 업로드 버튼에 마우스 가져다 댔을 때 효과 추가
+    const imageHover = document.createElement("style");
+    imageHover.textContent = `.imageButtonStyle:hover {
       background-image: url("https://playentry.org/uploads/확프/사진/확프사진온.svg") !important;
     }`;
-    document.head.appendChild(imagehover);
-    wasans = document.querySelector(
+    document.head.appendChild(imageHover);
+
+    // 스티커 버튼 복사해서 이미지 업로드 버튼으로 변환
+    stickerButton = document.querySelector(
       "section > div > div > div > div > div > div > div > a"
     );
-    wasansclone = wasans.cloneNode(true);
-    wasansclone.style.marginLeft = "10px";
-    wasansclone.classList.add("imagebuttonstyle");
-    wasansclone.onclick = () => {
+    stickerButtonClone = stickerButton.cloneNode(true);
+    stickerButtonClone.style.marginLeft = "10px";
+    stickerButtonClone.classList.add("imageButtonStyle");
+    stickerButtonClone.onclick = () => {
       const event = window.event; // 어짜피 크롬 전용 확프라 사용해도 상관 X
-      if (event.ctrlKey) {
-        if (
-          confirm(
-            "컨트롤과 함께 업로드 버튼을 누르면\n모든 유저 차단 해제 기능이 실행됩니다\n정말로 실행하시겠습니까?"
-          )
-        ) {
+
+      if (event.ctrlKey) { // 버튼을 컨트롤과 함께 누르면 모든 유저 차단 해제
+        let isUnblockAllUsers = confirm(
+          "컨트롤과 함께 업로드 버튼을 누르면\n모든 유저 차단 해제 기능이 실행됩니다\n정말로 실행하시겠습니까?"
+        )
+
+        if (isUnblockAllUsers) {
           chrome.storage.local.set(JSON.parse(`{"block":[]}`));
           location.reload();
         }
@@ -317,28 +349,32 @@ function imageUploadButton() {
         click();
       }
     };
-    wasans.after(wasansclone);
-    wasansclone.style.backgroundImage =
-      "url('https://playentry.org/img/IcoCmtPicture.svg')";
-    wasansclone.style.backgroundRepeat = "no-repeat";
+    stickerButton.after(stickerButtonClone);
+    stickerButtonClone.style.backgroundImage = "url('https://playentry.org/img/IcoCmtPicture.svg')";
+    stickerButtonClone.style.backgroundRepeat = "no-repeat";
   } catch {
     setTimeout(() => {
-      imageUploadButton();
+      addImageUploadButton();
     }, 100);
   }
 }
 
-if (
-  /https:\/\/playentry\.org\/community\/entrystory\/list\?\w{4}=.*$/g.test(
-    location.href
-  )
-) {
-  imageUploadButton();
+const entrystoryUrlPattern = /https:\/\/playentry\.org\/community\/entrystory\/list\?\w{4}=.*$/g;
+
+// 현재 페이지가 엔트리 이야기 일시 이미지 업로드 버튼 추가
+if (entrystoryUrlPattern.test(location.href)) {
+  addImageUploadButton();
 }
 
-chrome.storage.local.get(null, (items) => {
+// 디버깅용
+/* chrome.storage.local.get(null, (items) => {
   console.log(JSON.stringify(items));
-});
+}); */
+
+
+
+// 밑에 있는 건 무시하세요
+// ----------------------------------------------------------------
 
 /* <div style="
     background-color: white;
